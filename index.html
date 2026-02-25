@@ -369,7 +369,7 @@
 
         // episode artwork (resolved against feed URL)
         let artworkUrl = extractEpisodeArtworkUrl(item);
-        alert(artworkUrl)
+        //alert(artworkUrl)
         if (artworkUrl) artworkUrl = resolveUrl(feedUrl, artworkUrl);
 
         return { guid, title, pubDateRaw, pubDate, descriptionText, audioUrl, artworkUrl };

@@ -1,0 +1,42 @@
+# feed.yaml
+channel:
+  title: "3rd Engineer Podcast"
+  link: "https://example.com/podcast"
+  description: "An AI generated podcast to hopefully learn a thing or two for the 3rd engineer exam."
+  language: "en-us"
+  author: "NA"
+  owner:
+    name: "Your Name"
+    email: "you@example.com"
+
+  # Optional but recommended for Apple Podcasts
+  image: "https://example.com/podcast/artwork.jpg"
+  categories:
+    - "Technology"
+    - ["Education", "How To"]
+  explicit: false
+
+  # PodcastIndex optional extras
+  locked: false
+  funding:
+    url: "https://example.com/support"
+    message: "Support the show"
+
+  base_url: "https://a-very-large-dog.github.io/engineering-podcast/"  # used to build episode URLs if you give filenames
+  output: "feed.xml"                             # where to write the RSS
+
+episodes:
+  - guid: "ep-001"                 # stable unique id (or omit to auto-generate from enclosure url)
+    title: "Episode 1: Turbochargers"
+    description: "An overview of turbochargers for marine diesel engines."
+    pubDate: "2026-02-20T10:00:00-06:00"  # ISO 8601 preferred
+    enclosure:
+      url: "audio/20260220-Diesel-001-turbochargers.m4a"       # can be full URL or filename relative to base_url
+      type: "audio/mp4"
+      length: 12345678             # bytes (recommended; if unknown you can omit)
+    duration: "00:12:34"           # HH:MM:SS or MM:SS
+    explicit: false
+    image: "https://example.com/podcast/ep1.jpg"
+    season: 1
+    episode: 1
+    episodeType: "full"            # full | trailer | bonus

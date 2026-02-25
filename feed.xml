@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0" version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:podcast="https://podcastindex.org/namespace/1.0">
+  <channel>
+    <title>3rd Engineer Podcast</title>
+    <link>https://example.com/podcast</link>
+    <description>An AI generated podcast to hopefully learn a thing or two for the 3rd engineer exam.</description>
+    <language>en-us</language>
+    <itunes:author>NA</itunes:author>
+    <itunes:summary>An AI generated podcast to hopefully learn a thing or two for the 3rd engineer exam.</itunes:summary>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:owner>
+      <itunes:name>Your Name</itunes:name>
+      <itunes:email>you@example.com</itunes:email>
+      </itunes:owner>
+    <itunes:image href="https://example.com/podcast/artwork.jpg" />
+    <image>
+      <url>https://example.com/podcast/artwork.jpg</url>
+      <title>3rd Engineer Podcast</title>
+      <link>https://example.com/podcast</link>
+      </image>
+    <itunes:category text="Technology" />
+    <itunes:category text="Education">
+      <itunes:category text="How To" />
+      </itunes:category>
+    <podcast:locked>no</podcast:locked>
+    <podcast:funding url="https://example.com/support">Support the show</podcast:funding>
+    <item>
+      <title>Episode 1: Turbochargers</title>
+      <description>An overview of turbochargers for marine diesel engines.</description>
+      <pubDate>Fri, 20 Feb 2026 10:00:00 -0600</pubDate>
+      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260220-Diesel-001-turbochargers.m4a" type="audio/mp4" length="12345678" />
+      <guid isPermaLink="false">ep-001</guid>
+      <itunes:author>NA</itunes:author>
+      <itunes:summary>An overview of turbochargers for marine diesel engines.</itunes:summary>
+      <itunes:duration>00:12:34</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://example.com/podcast/ep1.jpg" />
+      <itunes:season>1</itunes:season>
+      <itunes:episode>1</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      </item>
+    </channel>
+  </rss>

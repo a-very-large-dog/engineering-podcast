@@ -142,9 +142,9 @@ def build_rss(feed: Dict[str, Any], out_path: str) -> None:
         base_url += "/"
 
     rss = ET.Element("rss", {"version": "2.0"})
-    rss.set(f"xmlns:itunes", ITUNES_NS)
-    rss.set(f"xmlns:atom", ATOM_NS)
-    rss.set(f"xmlns:podcast", PODCAST_NS)
+    #rss.set(f"xmlns:itunes", ITUNES_NS)
+    #rss.set(f"xmlns:atom", ATOM_NS)
+    #rss.set(f"xmlns:podcast", PODCAST_NS)
 
     channel = ET.SubElement(rss, "channel")
 

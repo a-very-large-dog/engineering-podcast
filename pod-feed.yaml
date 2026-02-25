@@ -36,7 +36,7 @@ episodes:
       length: 12345678             # bytes (recommended; if unknown you can omit)
     duration: "00:12:34"           # HH:MM:SS or MM:SS
     explicit: false
-    image: "https://example.com/podcast/ep1.jpg"
+    image: "https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260220-Diesel-001-turbochargers.png"
     season: 1
     episode: 1
     episodeType: "full"            # full | trailer | bonus

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Podcast Episodes</title>
 
-  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
@@ -18,6 +17,13 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+    .artwork {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 0.75rem;
+      background: #f1f3f5;
     }
     code.smallcode { font-size: 0.85rem; }
   </style>
@@ -33,7 +39,6 @@
 
   <main class="container py-4">
     <div class="row g-4">
-      <!-- Left: Controls + Player -->
       <div class="col-12 col-lg-4">
         <div class="card shadow-sm">
           <div class="card-body">
@@ -48,18 +53,19 @@
             </div>
 
             <div class="form-text mb-3">
-              If your feed is in the same repo, a relative path like <code class="smallcode">./feed.xml</code> works.
+              Same-repo feed? A relative path like <code class="smallcode">./feed.xml</code> works when served over HTTP(S).
             </div>
 
-            <div id="status" class="alert alert-secondary py-2 mb-0" role="alert">
-              Ready.
-            </div>
+            <div id="status" class="alert alert-secondary py-2 mb-0" role="alert">Ready.</div>
           </div>
         </div>
 
         <div class="card shadow-sm mt-4">
           <div class="card-body">
-            <h5 class="card-title mb-2">Now Playing</h5>
+            <h5 class="card-title mb-3">Now Playing</h5>
+
+            <img id="nowPlayingArtwork" class="artwork mb-3 d-none" alt="Episode artwork" />
+
             <div id="nowPlayingTitle" class="episode-title mb-1 text-truncate">Nothing selected</div>
             <div id="nowPlayingDate" class="episode-meta text-muted mb-3"></div>
 
@@ -74,13 +80,11 @@
             </div>
 
             <hr class="my-3" />
-
             <div id="nowPlayingDesc" class="episode-desc text-muted small"></div>
           </div>
         </div>
       </div>
 
-      <!-- Right: Episode List -->
       <div class="col-12 col-lg-8">
         <div class="card shadow-sm">
           <div class="card-body">
@@ -100,41 +104,28 @@
               </div>
             </div>
 
-            <div id="episodesContainer" class="list-group">
-              <!-- episodes injected here -->
-            </div>
-
-            <div id="emptyState" class="text-center text-muted py-5 d-none">
-              No episodes found.
-            </div>
+            <div id="episodesContainer" class="list-group"></div>
+            <div id="emptyState" class="text-center text-muted py-5 d-none">No episodes found.</div>
           </div>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <!-- Bootstrap 5 JS bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // --------- Configuration helpers ---------
-
-    // Convert RSS pubDate (or ISO date) string to Date safely
+    // --------- Helpers ---------
     function parseEpisodeDate(dateStr) {
       if (!dateStr) return null;
       const d = new Date(dateStr);
       return isNaN(d.getTime()) ? null : d;
     }
 
-    // If enclosure URL is relative, resolve it against the feed URL
-    function resolveUrl(feedUrl, enclosureUrl) {
-      try {
-        return new URL(enclosureUrl, feedUrl).toString();
-      } catch (e) {
-        return enclosureUrl; // fallback
-      }
+    function resolveUrl(feedUrl, maybeRelativeUrl) {
+      try { return new URL(maybeRelativeUrl, feedUrl).toString(); }
+      catch { return maybeRelativeUrl; }
     }
 
     function formatDate(d) {
@@ -142,8 +133,6 @@
       return d.toLocaleString(undefined, { year: "numeric", month: "short", day: "2-digit" });
     }
 
-    // Some feeds put HTML in description; keep it safe-ish.
-    // This removes scripts and returns a text-ish snippet.
     function sanitizeToText(html) {
       if (!html) return "";
       const $tmp = $("<div>").html(html);
@@ -151,16 +140,56 @@
       return $tmp.text().trim();
     }
 
-    // --------- App state ---------
-    let allEpisodes = []; // normalized objects
-    let activeGuid = null;
-
     function setStatus(type, message) {
-      // type: secondary | info | success | warning | danger
       const $status = $("#status");
       $status.removeClass().addClass("alert py-2 mb-0 alert-" + (type || "secondary"));
       $status.text(message);
     }
+
+    // Pull an artwork URL from an <item> (episode) node if present.
+    // Handles common podcast RSS patterns (iTunes + Media RSS).
+    function extractEpisodeArtworkUrl(itemEl) {
+      // itunes:image href="..."
+      const itunesImage = itemEl.getElementsByTagName("itunes:image")[0];
+      const itunesHref = itunesImage?.getAttribute("href");
+      if (itunesHref) return itunesHref;
+
+      // media:thumbnail url="..."
+      const mediaThumb = itemEl.getElementsByTagName("media:thumbnail")[0];
+      const mediaThumbUrl = mediaThumb?.getAttribute("url");
+      if (mediaThumbUrl) return mediaThumbUrl;
+
+      // media:content url="..." (sometimes used)
+      const mediaContent = itemEl.getElementsByTagName("media:content")[0];
+      const mediaContentUrl = mediaContent?.getAttribute("url");
+      if (mediaContentUrl) return mediaContentUrl;
+
+      return "";
+    }
+
+    // Channel-level fallback artwork (podcast cover art)
+    function extractChannelArtworkUrl(xmlDoc) {
+      // itunes:image href="..."
+      const itunesImage = xmlDoc.querySelector("channel > itunes\\:image");
+      const itunesHref = itunesImage?.getAttribute("href");
+      if (itunesHref) return itunesHref;
+
+      // <channel><image><url>...</url></image>
+      const channelImageUrl = xmlDoc.querySelector("channel > image > url")?.textContent?.trim();
+      if (channelImageUrl) return channelImageUrl;
+
+      // Some feeds use media:thumbnail at channel level
+      const mediaThumb = xmlDoc.querySelector("channel > media\\:thumbnail");
+      const mediaThumbUrl = mediaThumb?.getAttribute("url");
+      if (mediaThumbUrl) return mediaThumbUrl;
+
+      return "";
+    }
+
+    // --------- State ---------
+    let allEpisodes = [];
+    let activeGuid = null;
+    let channelArtworkUrl = "";
 
     function setNowPlaying(ep) {
       const player = $("#audioPlayer").get(0);
@@ -170,10 +199,15 @@
         $("#nowPlayingTitle").text("Nothing selected");
         $("#nowPlayingDate").text("");
         $("#nowPlayingDesc").text("");
+
+        $("#nowPlayingArtwork").addClass("d-none").attr("src", "");
+
         $("#playBtn, #pauseBtn").prop("disabled", true);
         $("#downloadLink").addClass("disabled").attr("href", "#");
         player.removeAttribute("src");
         player.load();
+
+        $(".episode-item").removeClass("active-episode");
         return;
       }
 
@@ -183,17 +217,36 @@
       $("#nowPlayingDate").text(formatDate(ep.pubDate));
       $("#nowPlayingDesc").text(ep.descriptionText || "");
 
-      player.src = ep.audioUrl;
+      // artwork: episode first, then channel fallback
+      const art = ep.artworkUrl || channelArtworkUrl || "";
+      if (art) {
+        $("#nowPlayingArtwork")
+          .removeClass("d-none")
+          .attr("src", art)
+          .off("error")
+          .on("error", function () {
+            // If artwork fails to load, hide it (avoids broken image box)
+            $(this).addClass("d-none").attr("src", "");
+          });
+      } else {
+        $("#nowPlayingArtwork").addClass("d-none").attr("src", "");
+      }
+
+      player.src = ep.audioUrl || "";
       player.load();
 
-      $("#playBtn, #pauseBtn").prop("disabled", false);
+      const playable = !!ep.audioUrl;
+      $("#playBtn, #pauseBtn").prop("disabled", !playable);
 
-      $("#downloadLink")
-        .removeClass("disabled")
-        .attr("href", ep.audioUrl)
-        .attr("download", (ep.title || "episode") + ".mp3");
+      if (playable) {
+        $("#downloadLink")
+          .removeClass("disabled")
+          .attr("href", ep.audioUrl)
+          .attr("download", (ep.title || "episode") + ".mp3");
+      } else {
+        $("#downloadLink").addClass("disabled").attr("href", "#");
+      }
 
-      // highlight selected episode in list
       $(".episode-item").removeClass("active-episode");
       $(`.episode-item[data-guid="${CSS.escape(ep.guid)}"]`).addClass("active-episode");
     }
@@ -204,14 +257,12 @@
 
       let episodes = allEpisodes.slice();
 
-      // sort
       episodes.sort((a, b) => {
         const at = a.pubDate ? a.pubDate.getTime() : 0;
         const bt = b.pubDate ? b.pubDate.getTime() : 0;
         return order === "asc" ? (at - bt) : (bt - at);
       });
 
-      // filter
       if (q) {
         episodes = episodes.filter(ep => {
           const hay = ((ep.title || "") + " " + (ep.descriptionText || "")).toLowerCase();
@@ -253,21 +304,16 @@
           </a>
         `);
 
-        if (activeGuid && ep.guid === activeGuid) {
-          $item.addClass("active-episode");
-        }
-
+        if (activeGuid && ep.guid === activeGuid) $item.addClass("active-episode");
         $container.append($item);
       }
     }
 
-    // --------- RSS loading/parsing ---------
     async function loadFeed(feedUrl) {
       setStatus("info", "Loading feed…");
 
       let xmlText;
       try {
-        // request as text, parse manually
         const resp = await fetch(feedUrl, { cache: "no-store" });
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         xmlText = await resp.text();
@@ -286,9 +332,11 @@
         return;
       }
 
-      // feed title
-      const feedTitle = xml.querySelector("channel > title")?.textContent?.trim() || "";
-      $("#feedTitle").text(feedTitle);
+      $("#feedTitle").text(xml.querySelector("channel > title")?.textContent?.trim() || "");
+
+      // channel artwork fallback
+      channelArtworkUrl = extractChannelArtworkUrl(xml);
+      if (channelArtworkUrl) channelArtworkUrl = resolveUrl(feedUrl, channelArtworkUrl);
 
       const items = Array.from(xml.querySelectorAll("item"));
 
@@ -305,43 +353,37 @@
 
         const pubDate = parseEpisodeDate(pubDateRaw);
 
-        // description can be description or content:encoded
         const descRaw =
           item.querySelector("description")?.textContent ||
           item.getElementsByTagName("content:encoded")?.[0]?.textContent ||
           "";
         const descriptionText = sanitizeToText(descRaw);
 
-        // enclosure: <enclosure url="..." type="audio/mpeg" ... />
         const enclosure = item.querySelector("enclosure");
         let audioUrl = enclosure?.getAttribute("url") || "";
 
-        // Some feeds use <link> to audio; optional fallback if it looks like an audio file
         const link = item.querySelector("link")?.textContent?.trim() || "";
-        if (!audioUrl && /\.(mp3|m4a|aac|ogg|wav)(\?.*)?$/i.test(link)) {
-          audioUrl = link;
-        }
+        if (!audioUrl && /\.(mp3|m4a|aac|ogg|wav)(\?.*)?$/i.test(link)) audioUrl = link;
 
-        if (audioUrl) {
-          audioUrl = resolveUrl(feedUrl, audioUrl);
-        }
+        if (audioUrl) audioUrl = resolveUrl(feedUrl, audioUrl);
 
-        return { guid, title, pubDateRaw, pubDate, descriptionText, audioUrl };
+        // episode artwork (resolved against feed URL)
+        let artworkUrl = extractEpisodeArtworkUrl(item);
+        alert(artworkUrl)
+        if (artworkUrl) artworkUrl = resolveUrl(feedUrl, artworkUrl);
+
+        return { guid, title, pubDateRaw, pubDate, descriptionText, audioUrl, artworkUrl };
       });
 
-      // default sort + render
       renderEpisodes();
-
       setStatus("success", `Loaded ${allEpisodes.length} episode(s).`);
 
-      // optionally auto-select first playable episode
-      const firstPlayable = allEpisodes.find(ep => ep.audioUrl);
-      if (firstPlayable) setNowPlaying(firstPlayable);
+      // auto-select first playable episode (or just first)
+      const first = allEpisodes.find(ep => ep.audioUrl) || allEpisodes[0];
+      if (first) setNowPlaying(first);
     }
 
-    // --------- UI wiring (jQuery) ---------
     $(function () {
-      // Initial load
       loadFeed($("#feedUrl").val().trim());
 
       $("#loadBtn").on("click", function () {
@@ -352,25 +394,21 @@
       $("#sortOrder").on("change", renderEpisodes);
       $("#search").on("input", renderEpisodes);
 
-      // Delegated click handlers for list items / buttons
       $("#episodesContainer").on("click", ".episode-item, .play-episode-btn", function (e) {
         e.preventDefault();
-
-        // Find the parent episode item
         const $item = $(this).closest(".episode-item");
         if ($item.hasClass("disabled")) return;
 
         const guid = $item.data("guid");
         const ep = allEpisodes.find(x => x.guid === guid);
-        if (!ep || !ep.audioUrl) return;
+        if (!ep) return;
 
         setNowPlaying(ep);
 
-        // start playing immediately if click was on button or item
         const player = $("#audioPlayer").get(0);
-        player.play().catch(() => {
-          // Autoplay may be blocked; user can press play.
-        });
+        if (ep.audioUrl) {
+          player.play().catch(() => {});
+        }
       });
 
       $("#playBtn").on("click", function () {

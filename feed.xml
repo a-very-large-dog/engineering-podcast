@@ -54,5 +54,50 @@
       <itunes:episode>2</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
       </item>
+    <item>
+      <title>Episode 3: Ten Test Bank Questions Explained Part 1</title>
+      <description>An overview of 10 tricky test bank questions - with the question and answer explained.</description>
+      <pubDate>Sat, 21 Feb 2026 11:00:00 -0600</pubDate>
+      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260221-diesel-003-10_cg_questions_001.m4a" type="audio/mp4" length="12345678" />
+      <guid isPermaLink="false">ep-003</guid>
+      <itunes:author>NA</itunes:author>
+      <itunes:summary>An overview of 10 tricky test bank questions - with the question and answer explained.</itunes:summary>
+      <itunes:duration>00:12:34</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260221-diesel-003-10_cg_questions_001.png" />
+      <itunes:season>1</itunes:season>
+      <itunes:episode>3</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      </item>
+    <item>
+      <title>Episode 4: Ten Test Bank Questions Explained Part 2</title>
+      <description>An overview of 10 tricky test bank questions - with the question and answer explained.</description>
+      <pubDate>Sun, 22 Feb 2026 11:00:00 -0600</pubDate>
+      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260222-diesel-004-10_cg_questions_002.m4a" type="audio/mp4" length="12345678" />
+      <guid isPermaLink="false">ep-004</guid>
+      <itunes:author>NA</itunes:author>
+      <itunes:summary>An overview of 10 tricky test bank questions - with the question and answer explained.</itunes:summary>
+      <itunes:duration>00:12:34</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260222-diesel-004-10_cg_questions_002.png" />
+      <itunes:season>1</itunes:season>
+      <itunes:episode>4</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      </item>
+    <item>
+      <title>Episode 5: Ten Test Bank Questions Explained Part 3</title>
+      <description>An overview of 10 tricky test bank questions - with the question and answer explained.</description>
+      <pubDate>Mon, 23 Feb 2026 11:00:00 -0600</pubDate>
+      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260223-diesel-005-10_cg_questions_003.m4a" type="audio/mp4" length="12345678" />
+      <guid isPermaLink="false">ep-005</guid>
+      <itunes:author>NA</itunes:author>
+      <itunes:summary>An overview of 10 tricky test bank questions - with the question and answer explained.</itunes:summary>
+      <itunes:duration>00:12:34</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260223-diesel-005-10_cg_questions_003.png" />
+      <itunes:season>1</itunes:season>
+      <itunes:episode>5</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      </item>
     </channel>
   </rss>

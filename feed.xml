@@ -28,15 +28,30 @@
       <title>Episode 1: Turbochargers</title>
       <description>An overview of turbochargers for marine diesel engines.</description>
       <pubDate>Fri, 20 Feb 2026 10:00:00 -0600</pubDate>
-      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260220-Diesel-001-turbochargers.m4a" type="audio/mp4" length="12345678" />
+      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260220-diesel-001-turbochargers.m4a" type="audio/mp4" length="12345678" />
       <guid isPermaLink="false">ep-001</guid>
       <itunes:author>NA</itunes:author>
       <itunes:summary>An overview of turbochargers for marine diesel engines.</itunes:summary>
       <itunes:duration>00:12:34</itunes:duration>
       <itunes:explicit>no</itunes:explicit>
-      <itunes:image href="https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260220-Diesel-001-turbochargers.png" />
+      <itunes:image href="https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260220-diesel-001-turbochargers.png" />
       <itunes:season>1</itunes:season>
       <itunes:episode>1</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      </item>
+    <item>
+      <title>Episode 2: Camshafts, Valves, and Lash</title>
+      <description>An overview of how camshafts drive valves, and how valve lash is adjusted.</description>
+      <pubDate>Fri, 20 Feb 2026 11:00:00 -0600</pubDate>
+      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260220-diesel-002-camshafts_and_valves.m4a" type="audio/mp4" length="12345678" />
+      <guid isPermaLink="false">ep-002</guid>
+      <itunes:author>NA</itunes:author>
+      <itunes:summary>An overview of how camshafts drive valves, and how valve lash is adjusted.</itunes:summary>
+      <itunes:duration>00:12:34</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260220-diesel-002-camshafts_and_valves.m4a.png" />
+      <itunes:season>1</itunes:season>
+      <itunes:episode>2</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
       </item>
     </channel>

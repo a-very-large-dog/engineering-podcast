@@ -99,5 +99,20 @@
       <itunes:episode>5</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
       </item>
+    <item>
+      <title>Episode 6: Introduction to Lube Oil Purification</title>
+      <description>An overview of the how and why of centrifugal purifiers for lube oil.</description>
+      <pubDate>Fri, 06 Mar 2026 11:00:00 -0600</pubDate>
+      <enclosure url="https://a-very-large-dog.github.io/engineering-podcast/audio/20260306-diesel-006-lube_oil_purifier_intro.m4a" type="audio/mp4" length="12345678" />
+      <guid isPermaLink="false">ep-006</guid>
+      <itunes:author>NA</itunes:author>
+      <itunes:summary>An overview of the how and why of centrifugal purifiers for lube oil.</itunes:summary>
+      <itunes:duration>00:12:34</itunes:duration>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:image href="https://a-very-large-dog.github.io/engineering-podcast/thumbnail/20260306-diesel-006-lube_oil_purifier_intro.png" />
+      <itunes:season>1</itunes:season>
+      <itunes:episode>5</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      </item>
     </channel>
   </rss>
